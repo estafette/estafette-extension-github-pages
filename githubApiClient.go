@@ -30,9 +30,9 @@ func newGithubAPIClient(accessToken string) GithubAPIClient {
 func (gh *githubAPIClientImpl) RequestPageBuild(repoOwner, repoName string) (err error) {
 
 	// https://developer.github.com/v3/repos/pages/#request-a-page-build
-	log.Printf("\nRetrieving milestone with title %v...", version)
+	log.Printf("\nRequesting github pages build...")
 
-	_, err = gh.callGithubAPI("POST", fmt.Sprintf("https://api.github.com/repos/%v/%v/pages/build", repoOwner, repoName), []int{http.StatusOK}, nil)
+	_, err = gh.callGithubAPI("POST", fmt.Sprintf("https://api.github.com/repos/%v/%v/pages/builds", repoOwner, repoName), []int{http.StatusOK}, nil)
 	if err != nil {
 		return err
 	}
