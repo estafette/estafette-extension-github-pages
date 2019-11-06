@@ -32,7 +32,7 @@ func (gh *githubAPIClientImpl) RequestPageBuild(repoOwner, repoName string) (err
 	// https://developer.github.com/v3/repos/pages/#request-a-page-build
 	log.Printf("\nRequesting github pages build...")
 
-	_, err = gh.callGithubAPI("POST", fmt.Sprintf("https://api.github.com/repos/%v/%v/pages/builds", repoOwner, repoName), []int{http.StatusOK}, nil)
+	_, err = gh.callGithubAPI("POST", fmt.Sprintf("https://api.github.com/repos/%v/%v/pages/builds", repoOwner, repoName), []int{http.StatusOK,http.StatusCreated}, nil)
 	if err != nil {
 		return err
 	}
