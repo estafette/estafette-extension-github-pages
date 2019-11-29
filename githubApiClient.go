@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 
+	"github.com/rs/zerolog/log"
 	"github.com/sethgrid/pester"
 )
 
@@ -30,9 +30,9 @@ func newGithubAPIClient(accessToken string) GithubAPIClient {
 func (gh *githubAPIClientImpl) RequestPageBuild(repoOwner, repoName string) (err error) {
 
 	// https://developer.github.com/v3/repos/pages/#request-a-page-build
-	log.Printf("\nRequesting github pages build...")
+	log.Info().Msg("Requesting github pages build...")
 
-	_, err = gh.callGithubAPI("POST", fmt.Sprintf("https://api.github.com/repos/%v/%v/pages/builds", repoOwner, repoName), []int{http.StatusOK,http.StatusCreated}, nil)
+	_, err = gh.callGithubAPI("POST", fmt.Sprintf("https://api.github.com/repos/%v/%v/pages/builds", repoOwner, repoName), []int{http.StatusOK, http.StatusCreated}, nil)
 	if err != nil {
 		return err
 	}
@@ -90,7 +90,7 @@ func (gh *githubAPIClientImpl) callGithubAPI(method, url string, validStatusCode
 	}
 
 	if string(body) == "" {
-		log.Printf("Received successful response without body for '%v %v' with status code %v", method, url, response.StatusCode)
+		log.Info().Msgf("Received successful response without body for '%v %v' with status code %v", method, url, response.StatusCode)
 		return
 	}
 
@@ -98,7 +98,7 @@ func (gh *githubAPIClientImpl) callGithubAPI(method, url string, validStatusCode
 	var b interface{}
 	err = json.Unmarshal(body, &b)
 	if err != nil {
-		log.Printf("Deserializing response for '%v' Github api call failed. Body: %v. Error: %v", url, string(body), err)
+		log.Info().Msgf("Deserializing response for '%v' Github api call failed. Body: %v. Error: %v", url, string(body), err)
 		return
 	}
 
